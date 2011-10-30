@@ -1,5 +1,5 @@
 // ==UserScript==
-// @match http://battlelog.battlefield.com/bf3/*
+// @match http://battlelog.battlefield.com/*
 // @run-at document-end
 // ==/UserScript==
 
