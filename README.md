@@ -17,6 +17,8 @@ EA's new Battlelog service is pretty awesome. Except when it isn't.
 [mainscript]: https://raw.github.com/cowboy/battlelog-hacks/master/dist/battlelog-hacks.js
 [userscript]: https://raw.github.com/cowboy/battlelog-hacks/master/dist/battlelog-hacks.user.js
 
+_Note: If you were using the [original gist version](https://gist.github.com/1323950), uninstall that first. You can do this in Chrome's "Extensions" manager._
+
 Click [this userscript][userscript], then click Ok/Continue/Install in any browser confirmation dialogs that pop up. Once installed, reload Battlelog.
 
 ## Updating
