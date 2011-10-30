@@ -7,7 +7,7 @@ EA's new Battlelog service is pretty awesome. Except when it isn't.
 [mainscript]: https://raw.github.com/cowboy/battlelog-hacks/master/dist/battlelog-hacks.js
 [userscript]: https://raw.github.com/cowboy/battlelog-hacks/master/dist/battlelog-hacks.user.js
 
-Click [this userscript][userscript], then click "Ok" in any browser confirmation dialogs that pop up.
+Click [this userscript][userscript], then click Ok/Continue/Install in any browser confirmation dialogs that pop up.
 
 ## Updating
 
