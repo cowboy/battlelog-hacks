@@ -31,6 +31,9 @@ Once the [userscript][userscript] has been installed, you should automatically s
 * Lots of messages are logged to the console. Check it out.
 * This is tested only in Chrome 14 with Battlefield 3.
 * It works for me.
+* Hopefully ESN will fix these issues internally, rendering this script obsolete.
+
+And for what it’s worth, I’ve spent a LOT of time in the WebKit inspector, setting breakpoints, monkey-patching methods, tracing through call stacks, etc. I’ve seen things done in JavaScript that have made my head spin and are going to keep me up at night for years to come. If this script makes your life easier, I’d appreciate [a modest donation](http://benalman.com/donate). It’ll help pay for the therapist I’m going to need.
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Issue a pull request when done. Found a bug? [File an issue](https://github.com/cowboy/battlelog-hacks/issues).
