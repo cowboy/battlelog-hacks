@@ -33,14 +33,31 @@ Once the [userscript][userscript] has been installed, you should automatically s
 * It works for me.
 * Hopefully ESN will fix these issues internally, rendering this script obsolete.
 
-And for what it’s worth, I’ve spent a LOT of time in the WebKit inspector, setting breakpoints, monkey-patching methods, tracing through call stacks, etc. I’ve seen things done in JavaScript that have made my head spin and are going to keep me up at night for years to come. If this script makes your life easier, I’d appreciate [a modest donation](http://benalman.com/donate). It’ll help pay for the therapist I’m going to need.
+And for what it's worth, I've spent a LOT of time in the WebKit inspector, setting breakpoints, monkey-patching methods, tracing through call stacks, etc. I've seen things done in JavaScript that have made my head spin and are going to keep me up at night for years to come. If this script makes your life easier, I'd appreciate [a modest donation](http://benalman.com/donate). It'll help pay for the therapist I'm going to need.
 
 ## Contributing
+
+Running in "development" mode:
+
+1. Clone the repo (You'll probably need [Git for Windows](http://code.google.com/p/msysgit/) first).
+1. Disable the `battlelog-hacks.user.js` extension in Chrome's "Extensions" manager.
+2. Run `start-webserver.cmd` in the `dev` directory.
+3. Drag `battlelog-hacks-dev.user.js` into the browser and click Ok/Continue/Install as-necessary.
+4. Reload Battlelog.
+
+_Remember that once you're done developing, you'll need to disable `battlelog-hacks-dev.user.js` and re-enable `battlelog-hacks.user.js` in Chrome's "Extensions" manager. Or just leave the webserver running, always._
+
 In lieu of a formal styleguide, take care to maintain the existing coding style. Issue a pull request when done. Found a bug? [File an issue](https://github.com/cowboy/battlelog-hacks/issues).
 
 ## Release History
 10/30/2011
-Initial release.
+Initial release. Not even a version number.
+
+10/30/2011
+v0.1.1
+Adding "development" web server and userscript.
+Auto-retry join errors are now whitelisted, to avoid auto-retrying in certain situations (like when kicked from a server).
+Version number is announced in a little blue box upon start.
 
 ## License
 Copyright (c) 2011 "Cowboy" Ben Alman  

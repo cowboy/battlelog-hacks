@@ -3,7 +3,9 @@
  * Copyright (c) 2011 "Cowboy" Ben Alman; Licensed MIT */
 
 // Global namespace.
-var exports = window.cowboy = {};
+var exports = window.cowboy = {
+  version: "0.1.1"
+};
 
 // ==========================================================================
 // Logging
@@ -42,6 +44,12 @@ var exports = window.cowboy = {};
 
   // Enable logging by default.
   exports.log.enabled = true;
+
+  // Log and show a little blue popup notice.
+  exports.popup = function(msg) {
+    comcenter.showReceipt(msg);
+    exports.log(msg);
+  };
 }(typeof exports === "object" && exports || this));
 
 // ==========================================================================
@@ -159,10 +167,32 @@ var exports = window.cowboy = {};
     });
   });
 
+  // A list of errors that should trigger auto-retry. Painstakingly parsed from
+  // gamemanager.handleErrors.
+  var validErrors = [
+    launcher.ALERT.ERR_LAUNCH_DISABLED,
+    launcher.ALERT.ERR_EMPTY_JOINSTATE,
+    launcher.ALERT.ERR_FAILED_PERSONACALL,
+    launcher.ALERT.ERR_BACKEND_HTTP,
+    launcher.ALERT.ERR_BACKEND_ROUTE,
+    launcher.ALERT.ERR_TOO_MANY_ATTEMPTS,
+    launcher.ALERT.ERR_DISCONNECT_GAME_SERVERFULL,
+    launcher.ALERT.ERR_SERVERCONNECT_FULL,
+    launcher.ALERT.ERR_SERVER_QUEUE_FULL,
+    launcher.ALERT.ERR_SERVERCONNECT,
+    launcher.ALERT.ERR_SERVERCONNECT_WRONGPASSWORD,
+    launcher.ALERT.ERR_CONFIG_MISSMATCH,
+    launcher.ALERT.ERR_GENERIC,
+    launcher.ALERT.ERR_MATCHMAKE.START_MATCHMAKING_FAILED,
+    launcher.ALERT.ERR_DISCONNECT_GAME_NOREPLY,
+    launcher.ALERT.ERR_DISCONNECT_GAME_TIMEDOUT,
+    launcher.ALERT.ERR_INVALID_GAME_STATE_ACTION
+  ];
+
   // Override existing error handler method.
   cowboy.hook(launcher, "_triggerEvent", {post: true}, function(type, details) {
-    // Only auto-retry on errors.
-    if (type === "error.generic") {
+    // Only auto-retry on valid errors.
+    if (type === "error.generic" && validErrors.indexOf(details[2]) !== -1) {
       cowboy.log("Starting auto-retry countdown.", details);
       // Start countdown.
       retry();
@@ -350,4 +380,4 @@ var exports = window.cowboy = {};
   }
 }());
 
-cowboy.log("Battlelog Hacks Loaded.");
+cowboy.popup("Battlelog Hacks v" + cowboy.version + " loaded.");
