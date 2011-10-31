@@ -2,13 +2,13 @@
 
 EA's new Battlelog service is pretty awesome. Except when it isn't.
 
-## What does it do?
+## What does this script do?
 
 * Auto-retries server join so you don't have to spam the button. To cancel auto-retry, click the "Close" button in the Game Manager error popup.
 * Remembers and auto-re-applies server browser sorting preference.
 * Prevents the server browser from scrolling to the top of the page on refresh.
 
-## What might it do in the future?
+## What might this script do in the future?
 
 * Possibly other stuff related to server browsing / joining.
 
