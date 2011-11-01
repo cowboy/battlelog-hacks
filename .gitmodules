@@ -1,0 +1,3 @@
+[submodule "dev/javascript-hooker"]
+	path = dev/javascript-hooker
+	url = git://github.com/cowboy/javascript-hooker.git

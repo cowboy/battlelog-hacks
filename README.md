@@ -39,15 +39,21 @@ And for what it's worth, I've spent a LOT of time in the WebKit inspector, setti
 
 Running in "development" mode:
 
-1. Clone the repo (You'll probably need [Git for Windows](http://code.google.com/p/msysgit/) first).
-1. Disable the `battlelog-hacks.user.js` extension in Chrome's "Extensions" manager.
-2. Run `start-webserver.cmd` in the `dev` directory.
-3. Drag `battlelog-hacks-dev.user.js` into the browser and click Ok/Continue/Install as-necessary.
-4. Reload Battlelog.
+1. Install [Git for Windows](http://code.google.com/p/msysgit/) if you don't already have it.
+2. In Git Bash, run `git clone git://github.com/cowboy/battlelog-hacks.git && cd battlelog-hacks && git submodule init && git submodule update`
+3. Disable the `battlelog-hacks.user.js` extension in Chrome's "Extensions" manager.
+4. Drag `battlelog-hacks-dev.user.js` into the browser and click Ok/Continue/Install as-necessary.
+5. Run `start-webserver.cmd` from the `dev` subdirectory.
+6. Edit scripts in the `dev\src` subdirectory.
+7. Reload Battlelog.
+8. Repeat steps 6-7 ad nauseum. Note that if you add or rename files, you'll need to edit `dev\node\files.js` and kill/restart the webserver (step 5).
+9. Once done, run `build.cmd` from the `dev` subdirectory to build `dist\battlelog-hacks.js`.
 
 _Remember that once you're done developing, you'll need to disable `battlelog-hacks-dev.user.js` and re-enable `battlelog-hacks.user.js` in Chrome's "Extensions" manager. Or just leave the webserver running, always._
 
 In lieu of a formal styleguide, take care to maintain the existing coding style. Issue a pull request when done. Found a bug? [File an issue](https://github.com/cowboy/battlelog-hacks/issues).
+
+_Also, please don't edit files in the "dist" subdirectory as they are generated via `build.cmd`. You'll find source code in the `dev\src` subdirectory!_
 
 ## Release History
 10/30/2011
@@ -58,6 +64,12 @@ v0.1.1
 Adding "development" web server and userscript.
 Auto-retry join errors are now whitelisted, to avoid auto-retrying in certain situations (like when kicked from a server).
 Version number is announced in a little blue box upon start.
+
+10/31/2011
+v0.2.0
+Split source into sub-files.
+Broke the hooking stuff out into JavaScript Hooker, included as a submodule.
+Created a build tool and updated the dev web server.
 
 ## License
 Copyright (c) 2011 "Cowboy" Ben Alman  
