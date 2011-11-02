@@ -16,20 +16,32 @@ EA's new Battlelog service is pretty awesome. Except when it isn't.
 
 [mainscript]: https://raw.github.com/cowboy/battlelog-hacks/master/dist/battlelog-hacks.js
 [userscript]: https://raw.github.com/cowboy/battlelog-hacks/master/dist/battlelog-hacks.user.js
+[greasemonkey]: https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/
 
-_Note: If you were using the [original gist version](https://gist.github.com/1323950), uninstall that first. You can do this in Chrome's "Extensions" manager._
+If you're using Firefox, make sure you have the [Greasemonkey][greasemonkey] add-on installed first.
 
-Click [this userscript][userscript], then click Ok/Continue/Install in any browser confirmation dialogs that pop up. Once installed, reload Battlelog.
+_Note: If you were using the [original gist version](https://gist.github.com/1323950), uninstall that first. See the "What's a Userscript?" section of this document for more information about managing userscripts._
+
+Click [this userscript][userscript], then click Ok/Continue/Install in any browser confirmation dialogs that pop up. Once installed, reload the Battlelog webpage. You should see a little blue message in the top left of Battlelog confirming that Battlelog Hacks has been loaded.
+
+## What's a Userscript?
+
+Userscripts are a convenient way to be able to add extra functionality to webpages. Chrome has native support for userscripts as Extensions, and Firefox supports userscripts via the [Greasemonkey][greasemonkey] add-on.
+
+To manage userscripts:
+
+* In Chrome: Tools > Extensions
+* In Firefox: Greasemonkey > Manage User Scripts
 
 ## Updating
 
-Once the [userscript][userscript] has been installed, you should automatically see changes to the [main script file][mainscript] whenever it gets updated, just reload Battlelog to get the latest version.
+Once the [userscript][userscript] has been installed, changes to the [main script file][mainscript] will automatically load whenever it's updated. Just reload the Battlelog webpage to get the latest version.
 
 ## Notes
 
 * This is a work in progress.
 * Lots of messages are logged to the console. Check it out.
-* This is tested only in Chrome 14 with Battlefield 3.
+* This has been tested in Firefox 7 (with [Greasemonkey][greasemonkey]) and Chrome 14.
 * It works for me.
 * Hopefully ESN will fix these issues internally, rendering this script obsolete.
 
@@ -41,7 +53,7 @@ Running in "development" mode:
 
 1. Install [Git for Windows](http://code.google.com/p/msysgit/) if you don't already have it.
 2. In Git Bash, run `git clone git://github.com/cowboy/battlelog-hacks.git && cd battlelog-hacks && git submodule init && git submodule update`
-3. Disable the `battlelog-hacks.user.js` extension in Chrome's "Extensions" manager.
+3. Disable the `battlelog-hacks.user.js` userscript / extension. See the "What's a Userscript?" section for more information on this.
 4. Drag `battlelog-hacks-dev.user.js` into the browser and click Ok/Continue/Install as-necessary.
 5. Run `start-webserver.cmd` from the `dev` subdirectory.
 6. Edit scripts in the `dev\src` subdirectory.
@@ -49,7 +61,7 @@ Running in "development" mode:
 8. Repeat steps 6-7 ad nauseum. Note that if you add or rename files, you'll need to edit `dev\node\files.js` and kill/restart the webserver (step 5).
 9. Once done, run `build.cmd` from the `dev` subdirectory to build `dist\battlelog-hacks.js`.
 
-_Remember that once you're done developing, you'll need to disable `battlelog-hacks-dev.user.js` and re-enable `battlelog-hacks.user.js` in Chrome's "Extensions" manager. Or just leave the webserver running, always._
+_Remember that once you're done developing, you'll need to disable `battlelog-hacks-dev.user.js` and re-enable `battlelog-hacks.user.js`. Or just leave the webserver running, always._
 
 In lieu of a formal styleguide, take care to maintain the existing coding style. Issue a pull request when done. Found a bug? [File an issue](https://github.com/cowboy/battlelog-hacks/issues).
 
