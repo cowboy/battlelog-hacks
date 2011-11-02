@@ -22,7 +22,7 @@ If you're using Firefox, make sure you have the [Greasemonkey][greasemonkey] add
 
 _Note: If you were using the [original gist version](https://gist.github.com/1323950), uninstall that first. See the "What's a Userscript?" section of this document for more information about managing userscripts._
 
-Click [this userscript][userscript], then click Ok/Continue/Install in any browser confirmation dialogs that pop up. Once installed, reload the Battlelog webpage. You should see a little blue message in the top left of Battlelog confirming that Battlelog Hacks has been loaded.
+Anyways, **[to install, click this userscript][userscript]**, then click Ok/Continue/Install in any browser confirmation dialogs that pop up. Once installed, reload the Battlelog webpage. You should see a little blue message in the top left of Battlelog confirming that Battlelog Hacks has been loaded.
 
 ## What's a Userscript?
 
