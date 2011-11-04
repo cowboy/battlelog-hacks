@@ -5,7 +5,7 @@ exports.files = [
   "javascript-hooker/dist/ba-hooker.js",
   "src/log.js",
   "src/auto-retry.js",
-  "src/auto-sort.js",
+  "src/auto-select.js",
   "src/suppress-scrolltop.js",
   "src/outro.js"
 ];
