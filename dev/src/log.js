@@ -41,6 +41,7 @@
   cowboy.log.enabled = true;
 
   // Hook all function properties of a given object to help debugging.
+  var indent = 0;
   cowboy.inspect = function(context, prop) {
     // If context was omitted, default to window.
     if (typeof context === "string") {
@@ -49,21 +50,26 @@
     }
     // The object to be inspected.
     var obj = context[prop];
-    // Iterate over all object keys.
-    Object.keys(obj).filter(function(key) {
-      // Skip any functions.
-      return typeof obj[key] === "function";
-    }).forEach(function(key) {
-      var name = prop + "." + key;
-      // Store a reference to the original function.
-      var orig = obj[key];
-      cowboy.log("Inspecting %s", name);
-      // Override it with a new function.
-      cowboy.hooker.hook(obj, key, function() {
-        cowboy.log(name, arguments);
-      });
+    var methods = cowboy.hooker.hook(obj, {
+      passName: true,
+      pre: function(name) {
+        indent++;
+        // Log arguments the method was called with.
+        cowboy.log(repeat(">", indent), prop + "." + name, slice(arguments, 1));
+      },
+      post: function(result, name) {
+        // Log the result.
+        cowboy.log(repeat("<", indent), "(" + prop + "." + name + ")", result);
+        indent = Math.max(0, indent - 1);
+      }
     });
+    cowboy.log('Inspecting "%s" methods: %o', prop, methods);
   };
+
+  // Repeat a string n times.
+  function repeat(str, n) {
+    return Array(n + 1).join(str);
+  }
 
   // Log and show a little blue popup notice.
   cowboy.popup = function(msg) {

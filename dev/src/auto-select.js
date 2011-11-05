@@ -17,10 +17,7 @@ cowboy.register("Auto-select First Server");
   };
 
   // Whenever the serverlist is sorted, highlight the first server.
-  cowboy.hooker.hook(serverguideSort, "sortSurfaces", {
-    post: cowboy.selectFirstServer
-  });
-  cowboy.hooker.hook(serverguideSort, "sortByPing", {
+  cowboy.hooker.hook(serverguideSort, ["sortSurfaces", "sortByPing"], {
     post: cowboy.selectFirstServer
   });
 
