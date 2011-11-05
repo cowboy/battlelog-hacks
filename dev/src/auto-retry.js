@@ -32,6 +32,7 @@ cowboy.register("Auto-retry Join Server");
     launcher.ALERT.ERR_BACKEND_ROUTE,
     launcher.ALERT.ERR_TOO_MANY_ATTEMPTS,
     launcher.ALERT.ERR_DISCONNECT_GAME_SERVERFULL,
+    launcher.ALERT.ERR_SERVERCONNECT_SERVERFULL,
     launcher.ALERT.ERR_SERVERCONNECT_FULL,
     launcher.ALERT.ERR_SERVER_QUEUE_FULL,
     launcher.ALERT.ERR_SERVERCONNECT,
