@@ -8,6 +8,7 @@ EA's new Battlelog service is pretty awesome. Except when it isn't.
 * <del>Remembers and auto-re-applies server browser sorting preference.</del> **Fixed!**
 * Automatically selects the first server in the server browser after refreshing or sorting.
 * Prevents the server browser from scrolling to the top of the page on refresh.
+* Remembers Com center friends list shown/collapsed state.
 
 ## What might this script do in the future?
 
@@ -86,8 +87,16 @@ Created a build tool and updated the dev web server.
 
 11/4/2011
 v0.3.0
-Removed server browser re-sort code (which has been implemented natively)
+Removed server browser re-sort code (which has been implemented natively).
 Automatically selects the first server in the server browser after refreshing or sorting.
+
+11/6/2011
+v0.3.1
+Updated JavaScript Hooker.
+Now remembers Com center friends list state.
+Updated Server join auto-retry error list.
+Streamlined development process slightly.
+
 
 ## License
 Copyright (c) 2011 "Cowboy" Ben Alman  
