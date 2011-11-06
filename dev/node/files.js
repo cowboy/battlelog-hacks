@@ -1,18 +1,17 @@
 var fs = require("fs");
+var path = require("path");
 
-exports.files = [
-  "src/intro.js",
-  "javascript-hooker/dist/ba-hooker.js",
-  "src/log.js",
-  "src/auto-retry.js",
-  "src/auto-select.js",
-  "src/suppress-scrolltop.js",
-  "src/outro.js"
-];
+// Read (and return) files array from files.json.
+exports.files = function() {
+  var json = fs.readFileSync(path.join(__dirname, "files.json"), "UTF8");
+  return JSON.parse(json);
+};
 
+// Given an array of filepaths, concatenate their contents, stripping redundant
+// comments.
 exports.concat = function(files) {
   // Use defaults if files aren't specified.
-  files || (files = exports.files);
+  files || (files = exports.files());
   // Concat files.
   return files.map(function(filepath, i) {
     var src = fs.readFileSync(filepath, "UTF8");

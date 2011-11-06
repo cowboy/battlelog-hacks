@@ -1,0 +1,9 @@
+[
+  "src/intro.js",
+  "javascript-hooker/dist/ba-hooker.js",
+  "src/log.js",
+  "src/bh-launcher-retry.js",
+  "src/bh-serverguidesort-select.js",
+  "src/bh-ajaxnavigation-scrolltop.js",
+  "src/outro.js"
+]
