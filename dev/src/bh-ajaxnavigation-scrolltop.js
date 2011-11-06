@@ -2,7 +2,7 @@
  * http://benalman.com/
  * Copyright (c) 2011 "Cowboy" Ben Alman; Licensed MIT */
 
-cowboy.register("Suppress scrollTop on Serverlist Refresh");
+cowboy.register("Suppress scrollTop on serverlist refresh");
 
 (function() {
   var suppressScrollTop;

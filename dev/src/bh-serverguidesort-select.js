@@ -2,7 +2,7 @@
  * http://benalman.com/
  * Copyright (c) 2011 "Cowboy" Ben Alman; Licensed MIT */
 
-cowboy.register("Auto-select First Server");
+cowboy.register("Auto-select first server");
 
 (function() {
   // Highlight the first server in the server list.

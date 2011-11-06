@@ -2,7 +2,7 @@
  * http://benalman.com/
  * Copyright (c) 2011 "Cowboy" Ben Alman; Licensed MIT */
 
-cowboy.register("Auto-retry Join Server");
+cowboy.register("Auto-retry join server");
 
 (function() {
   var join, id;
