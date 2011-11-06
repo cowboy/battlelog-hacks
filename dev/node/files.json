@@ -4,6 +4,7 @@
   "src/log.js",
   "src/bh-launcher-retry.js",
   "src/bh-serverguidesort-select.js",
+  "src/bh-comcenter-friends.js",
   "src/bh-ajaxnavigation-scrolltop.js",
   "src/outro.js"
 ]
