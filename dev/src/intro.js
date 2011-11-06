@@ -4,16 +4,14 @@
 
 // Global namespace.
 window.cowboy = {
-  version: "0.3.0",
+  version: "0.3.1",
   registry: [],
   register: function(name) {
     cowboy.registry.push(name);
+    cowboy.log("Registered: " + name);
   },
   loaded: function() {
     cowboy.popup("Battlelog Hacks v" + cowboy.version + " loaded.");
-    cowboy.registry.forEach(function(name) {
-      cowboy.log("Registered: " + name);
-    });
   }
 };
 

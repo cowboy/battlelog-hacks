@@ -4,23 +4,21 @@
 
 // Global namespace.
 window.cowboy = {
-  version: "0.3.0",
+  version: "0.3.1",
   registry: [],
   register: function(name) {
     cowboy.registry.push(name);
+    cowboy.log("Registered: " + name);
   },
   loaded: function() {
     cowboy.popup("Battlelog Hacks v" + cowboy.version + " loaded.");
-    cowboy.registry.forEach(function(name) {
-      cowboy.log("Registered: " + name);
-    });
   }
 };
 
 // Hooker.
 var exports = cowboy.hooker = {};
 
-/* JavaScript Hooker - v0.2.1 - 10/31/2011
+/* JavaScript Hooker - v0.2.2 - 11/5/2011
  * http://github.com/cowboy/javascript-hooker
  * Copyright (c) 2011 "Cowboy" Ben Alman; Licensed MIT, GPL */
 
@@ -29,6 +27,8 @@ var exports = cowboy.hooker = {};
   var undef;
   // Get an array from an array-like object with slice.call(arrayLikeObject).
   var slice = [].slice;
+  // Get an "[object [[Class]]]" string with toString.call(value).
+  var toString = {}.toString;
 
   // I can't think of a better way to ensure a value is a specific type other
   // than to create instances and use the `instanceof` operator.
@@ -57,76 +57,136 @@ var exports = cowboy.hooker = {};
     return new HookerFilter(context, args);
   };
 
+  // Execute callback(s) for properties of the specified object.
+  function forMethods(obj, props, callback) {
+    var prop;
+    if (typeof props === "string") {
+      // A single prop string was passed. Create an array.
+      props = [props];
+    } else if (props == null) {
+      // No props were passed, so iterate over all properties, building an
+      // array. Unfortunately, Object.keys(obj) doesn't work everywhere yet, so
+      // this has to be done manually.
+      props = [];
+      for (prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+          props.push(prop);
+        }
+      }
+    }
+    // Execute callback for every method in the props array.
+    var i = props.length;
+    while (i--) {
+      // If the property isn't a function...
+      if (toString.call(obj[props[i]]) !== "[object Function]" ||
+        // ...or the callback returns false...
+        callback(obj, props[i]) === false) {
+        // ...remove it from the props array to be returned.
+        props.splice(i, 1);
+      }
+    }
+    // Return an array of method names for which the callback didn't fail.
+    return props;
+  }
+
   // Monkey-patch (hook) a method of an object.
-  exports.hook = function(obj, methodName, options) {
+  exports.hook = function(obj, props, options) {
+    // If the props argument was omitted, shuffle the arguments.
+    if (options == null) {
+      options = props;
+      props = null;
+    }
     // If just a function is passed instead of an options hash, use that as a
     // pre-hook function.
     if (typeof options === "function") {
       options = {pre: options};
     }
-    // The original (current) method.
-    var orig = obj[methodName];
-    // Re-define the method.
-    obj[methodName] = function() {
-      var result, origResult, tmp;
-      // If a pre-hook function was specified, invoke it in the current context
-      // with the passed-in arguments, and store its result.
-      if (options.pre) {
-        result = options.pre.apply(this, arguments);
-      }
 
-      if (result instanceof HookerFilter) {
-        // If the pre-hook returned hooker.filter(context, args), invoke the
-        // original function with that context and arguments, and store its
-        // result.
-        origResult = result = orig.apply(result.context, result.args);
-      } else if (result instanceof HookerPreempt) {
-        // If the pre-hook returned hooker.preempt(value) just use the passed
-        // value and don't execute the original function.
-        origResult = result = result.value;
-      } else {
-        // Invoke the original function in the current context with the
-        // passed-in arguments, and store its result.
-        origResult = orig.apply(this, arguments);
-        // If the pre-hook returned hooker.override(value), use the passed
-        // value, otherwise use the original function's result.
-        result = result instanceof HookerOverride ? result.value : origResult;
-      }
+    // Hook the specified method of the object.
+    return forMethods(obj, props, function(obj, prop) {
+      // The original (current) method.
+      var orig = obj[prop];
+      // The new hooked function.
+      function hooked() {
+        var result, origResult, tmp;
 
-      if (options.post) {
-        // If a post-hook function was specified, invoke it in the current
-        // context, passing in the result of the original function as the first
-        // argument, followed by any passed-in arguments.
-        tmp = options.post.apply(this, [origResult].concat(slice.call(arguments)));
-        if (tmp instanceof HookerOverride) {
-          // If the post-hook returned hooker.override(value), use the passed
-          // value, otherwise use the previously computed result.
-          result = tmp.value;
+        // Get an array of arguments.
+        var args = slice.call(arguments);
+
+        // If passName option is specified, prepend prop to the args array,
+        // passing it as the first argument to any specified hook functions.
+        if (options.passName) {
+          args.unshift(prop);
         }
+
+        // If a pre-hook function was specified, invoke it in the current
+        // context with the passed-in arguments, and store its result.
+        if (options.pre) {
+          result = options.pre.apply(this, args);
+        }
+
+        if (result instanceof HookerFilter) {
+          // If the pre-hook returned hooker.filter(context, args), invoke the
+          // original function with that context and arguments, and store its
+          // result.
+          origResult = result = orig.apply(result.context, result.args);
+        } else if (result instanceof HookerPreempt) {
+          // If the pre-hook returned hooker.preempt(value) just use the passed
+          // value and don't execute the original function.
+          origResult = result = result.value;
+        } else {
+          // Invoke the original function in the current context with the
+          // passed-in arguments, and store its result.
+          origResult = orig.apply(this, arguments);
+          // If the pre-hook returned hooker.override(value), use the passed
+          // value, otherwise use the original function's result.
+          result = result instanceof HookerOverride ? result.value : origResult;
+        }
+
+        if (options.post) {
+          // If a post-hook function was specified, invoke it in the current
+          // context, passing in the result of the original function as the
+          // first argument, followed by any passed-in arguments.
+          tmp = options.post.apply(this, [origResult].concat(args));
+          if (tmp instanceof HookerOverride) {
+            // If the post-hook returned hooker.override(value), use the passed
+            // value, otherwise use the previously computed result.
+            result = tmp.value;
+          }
+        }
+
+        // Unhook if the "once" option was specified.
+        if (options.once) {
+          exports.unhook(obj, prop);
+        }
+
+        // Return the result!
+        return result;
       }
-      // Unhook if the "once" option was specified.
-      if (options.once) {
-        exports.unhook(obj, methodName);
-      }
-      // Return the result!
-      return result;
-    };
-    // Store a reference to the original method as a property on the new one.
-    obj[methodName]._orig = orig;
+      // Re-define the method.
+      obj[prop] = hooked;
+      // Fail if the function couldn't be hooked.
+      if (obj[prop] !== hooked) { return false; }
+      // Store a reference to the original method as a property on the new one.
+      obj[prop]._orig = orig;
+    });
   };
-  
+
   // Get a reference to the original method from a hooked function.
-  exports.orig = function(obj, methodName) {
-    return obj[methodName]._orig;
+  exports.orig = function(obj, prop) {
+    return obj[prop]._orig;
   };
 
   // Un-monkey-patch (unhook) a method of an object.
-  exports.unhook = function(obj, methodName) {
-    var orig = exports.orig(obj, methodName);
-    // Only unhook if it hasn't already been unhooked.
-    if (orig) {
-      obj[methodName] = orig;
-    }
+  exports.unhook = function(obj, props) {
+    return forMethods(obj, props, function(obj, prop) {
+      // Get a reference to the original method, if it exists.
+      var orig = exports.orig(obj, prop);
+      // If there's no original method, it can't be unhooked, so fail.
+      if (!orig) { return false; }
+      // Unhook the method.
+      obj[prop] = orig;
+    });
   };
 }(typeof exports === "object" && exports || this));
 
@@ -169,6 +229,7 @@ var exports = cowboy.hooker = {};
   cowboy.log.enabled = true;
 
   // Hook all function properties of a given object to help debugging.
+  var indent = 0;
   cowboy.inspect = function(context, prop) {
     // If context was omitted, default to window.
     if (typeof context === "string") {
@@ -177,21 +238,26 @@ var exports = cowboy.hooker = {};
     }
     // The object to be inspected.
     var obj = context[prop];
-    // Iterate over all object keys.
-    Object.keys(obj).filter(function(key) {
-      // Skip any functions.
-      return typeof obj[key] === "function";
-    }).forEach(function(key) {
-      var name = prop + "." + key;
-      // Store a reference to the original function.
-      var orig = obj[key];
-      cowboy.log("Inspecting %s", name);
-      // Override it with a new function.
-      cowboy.hooker.hook(obj, key, function() {
-        cowboy.log(name, arguments);
-      });
+    var methods = cowboy.hooker.hook(obj, {
+      passName: true,
+      pre: function(name) {
+        indent++;
+        // Log arguments the method was called with.
+        cowboy.log(repeat(">", indent), prop + "." + name, slice(arguments, 1));
+      },
+      post: function(result, name) {
+        // Log the result.
+        cowboy.log(repeat("<", indent), "(" + prop + "." + name + ")", result);
+        indent = Math.max(0, indent - 1);
+      }
     });
+    cowboy.log('Inspecting "%s" methods: %o', prop, methods);
   };
+
+  // Repeat a string n times.
+  function repeat(str, n) {
+    return Array(n + 1).join(str);
+  }
 
   // Log and show a little blue popup notice.
   cowboy.popup = function(msg) {
@@ -200,7 +266,7 @@ var exports = cowboy.hooker = {};
   };
 }());
 
-cowboy.register("Auto-retry Join Server");
+cowboy.register("Auto-retry join server");
 
 (function() {
   var join, id;
@@ -230,15 +296,15 @@ cowboy.register("Auto-retry Join Server");
     launcher.ALERT.ERR_BACKEND_ROUTE,
     launcher.ALERT.ERR_TOO_MANY_ATTEMPTS,
     launcher.ALERT.ERR_DISCONNECT_GAME_SERVERFULL,
+    launcher.ALERT.ERR_SERVERCONNECT_SERVERFULL,
     launcher.ALERT.ERR_SERVERCONNECT_FULL,
     launcher.ALERT.ERR_SERVER_QUEUE_FULL,
+    launcher.ALERT.ERR_SERVERCONNECT_INVALIDGAMESTATE,
+    launcher.ALERT.ERR_SERVERCONNECT_TIMEOUT,
     launcher.ALERT.ERR_SERVERCONNECT,
-    launcher.ALERT.ERR_SERVERCONNECT_WRONGPASSWORD,
+    launcher.ALERT.ERR_PARAM_INVALIDMISSION,
     launcher.ALERT.ERR_CONFIG_MISSMATCH,
-    launcher.ALERT.ERR_GENERIC,
     launcher.ALERT.ERR_MATCHMAKE.START_MATCHMAKING_FAILED,
-    launcher.ALERT.ERR_DISCONNECT_GAME_NOREPLY,
-    launcher.ALERT.ERR_DISCONNECT_GAME_TIMEDOUT,
     launcher.ALERT.ERR_INVALID_GAME_STATE_ACTION
   ];
 
@@ -296,7 +362,7 @@ cowboy.register("Auto-retry Join Server");
   $(document).delegate("#gamemanager-state-close", "click", unretry);
 }());
 
-cowboy.register("Auto-select First Server");
+cowboy.register("Auto-select first server");
 
 (function() {
   // Highlight the first server in the server list.
@@ -311,10 +377,7 @@ cowboy.register("Auto-select First Server");
   };
 
   // Whenever the serverlist is sorted, highlight the first server.
-  cowboy.hooker.hook(serverguideSort, "sortSurfaces", {
-    post: cowboy.selectFirstServer
-  });
-  cowboy.hooker.hook(serverguideSort, "sortByPing", {
+  cowboy.hooker.hook(serverguideSort, ["sortSurfaces", "sortByPing"], {
     post: cowboy.selectFirstServer
   });
 
@@ -327,7 +390,50 @@ cowboy.register("Auto-select First Server");
   }
 }());
 
-cowboy.register("Suppress scrollTop on Serverlist Refresh");
+cowboy.register("Remember Com center friends list state");
+
+(function() {
+  // The comcenter.updateLocalStorage method seems to be called whenever the
+  // online and offline friends lists are opened or closed.
+  cowboy.hooker.hook(comcenter, "updateLocalStorage", {
+    post: function() {
+      // Get the current com center friends list state.
+      var state = $S("comcenter-surface-friends").getState();
+      // Store state for later use.
+      localStorage.setItem("cb_show_friends_online", state.showingOnline);
+      localStorage.setItem("cb_show_friends_offline", state.showingOffline);
+    }
+  });
+
+  // Get the current Battlelog com center friends list state object.
+  var state = $S("comcenter-surface-friends").getState();
+
+  // Fix state, logging if it actually needed to be fixed..
+  function fix(mode) {
+    // Retrieve the previously-stored state.
+    var s = localStorage.getItem("cb_show_friends_" + mode) === "true";
+    // Update the Battlelog state object showingOnline/showingOffline prop.
+    state["showing" + mode[0].toUpperCase() + mode.slice(1)] = s;
+    // If the currently displayed state doesn't reflect the expected state...
+    if (Boolean($(".comcenter-friend-" + mode + ":visible").length) !== s) {
+      // Log to the console.
+      cowboy.log("Com center " + mode + " friends list should have been " +
+        (s ? "visible" : "hidden") + " but wasn't, fixing.");
+      // Actually hide or show the friends list in the DOM.
+      $("#comcenter-" + mode + "-separator").toggleClass("showing-" + mode, s);
+      $(".comcenter-friend-" + mode).toggleClass("comcenter-friend-hidden", !s);
+    }
+  }
+
+  // Fix both online and offline state.
+  fix("online");
+  fix("offline");
+
+  // Force Battlelog to update its internal state objects.
+  comcenter.updateLocalStorage();
+}());
+
+cowboy.register("Suppress scrollTop on serverlist refresh");
 
 (function() {
   var suppressScrollTop;
