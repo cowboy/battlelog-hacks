@@ -97,6 +97,9 @@ Now remembers Com center friends list state.
 Updated Server join auto-retry error list.
 Streamlined development process slightly.
 
+11/6/2011
+v0.3.2
+Bugfix: When the server list is refreshed or sorted, the first server is now both highlighted AND selected (it was only getting highlighted).
 
 ## License
 Copyright (c) 2011 "Cowboy" Ben Alman  

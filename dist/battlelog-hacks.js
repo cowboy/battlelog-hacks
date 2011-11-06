@@ -4,7 +4,7 @@
 
 // Global namespace.
 window.cowboy = {
-  version: "0.3.1",
+  version: "0.3.2",
   registry: [],
   register: function(name) {
     cowboy.registry.push(name);
@@ -371,13 +371,17 @@ cowboy.register("Auto-select first server");
     var ids = serverguideSort.getAllServerSurfaceIds();
     // If there aren't any servers, abort.
     if (ids.length === 0) { return; }
-    // Highlight the first server (its numeric id value must be parsed from
-    // the id string).
-    serverguide.highlightServerIndex(+ids[0].split('-')[2]);
+    // Get the first server element.
+    var elem = $("#" + ids[0]);
+    // Get the server name.
+    var name = $.trim(elem.find(".serverguide-cell-name-server-name").text());
+    cowboy.log("Selecting server:", name);
+    // Click it.
+    elem.find(".serverguide-bodycell:first").click();
   };
 
   // Whenever the serverlist is sorted, highlight the first server.
-  cowboy.hooker.hook(serverguideSort, ["sortSurfaces", "sortByPing"], {
+  cowboy.hooker.hook(serverguideSort, "sortSurfaces", {
     post: cowboy.selectFirstServer
   });
 
