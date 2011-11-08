@@ -4,7 +4,7 @@
 
 // Global namespace.
 window.cowboy = {
-  version: "0.3.2",
+  version: "0.3.3",
   registry: [],
   register: function(name) {
     cowboy.registry.push(name);

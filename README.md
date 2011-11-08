@@ -101,6 +101,10 @@ Streamlined development process slightly.
 v0.3.2
 Bugfix: When the server list is refreshed or sorted, the first server is now both highlighted AND selected (it was only getting highlighted).
 
+11/8/2011
+v0.3.3
+Com center online friends now default to shown, while offline friends default to hidden.
+
 ## License
 Copyright (c) 2011 "Cowboy" Ben Alman  
 Licensed under the MIT license.  

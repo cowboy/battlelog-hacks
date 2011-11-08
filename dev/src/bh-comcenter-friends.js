@@ -21,9 +21,7 @@ cowboy.register("Remember Com center friends list state");
   var state = $S("comcenter-surface-friends").getState();
 
   // Fix state, logging if it actually needed to be fixed..
-  function fix(mode) {
-    // Retrieve the previously-stored state.
-    var s = localStorage.getItem("cb_show_friends_" + mode) === "true";
+  function fix(mode, s) {
     // Update the Battlelog state object showingOnline/showingOffline prop.
     state["showing" + mode[0].toUpperCase() + mode.slice(1)] = s;
     // If the currently displayed state doesn't reflect the expected state...
@@ -37,9 +35,10 @@ cowboy.register("Remember Com center friends list state");
     }
   }
 
-  // Fix both online and offline state.
-  fix("online");
-  fix("offline");
+  // Fix both online and offline state. Online defaults to shown, while offline
+  // defaults to hidden.
+  fix("online", localStorage.getItem("cb_show_friends_online") !== "false");
+  fix("offline", localStorage.getItem("cb_show_friends_offline") === "true");
 
   // Force Battlelog to update its internal state objects.
   comcenter.updateLocalStorage();
