@@ -105,7 +105,11 @@ Bugfix: When the server list is refreshed or sorted, the first server is now bot
 v0.3.3
 Com center online friends now default to shown, while offline friends default to hidden.
 
+2/26/2011
+v0.3.4
+Com center online friends are always shown by default, while offline friends are always hidden by default.
+
 ## License
-Copyright (c) 2011 "Cowboy" Ben Alman  
+Copyright (c) 2012 "Cowboy" Ben Alman  
 Licensed under the MIT license.  
 <http://benalman.com/about/license/>

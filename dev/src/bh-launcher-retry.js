@@ -1,6 +1,6 @@
 /* Battlelog Hacks
  * http://benalman.com/
- * Copyright (c) 2011 "Cowboy" Ben Alman; Licensed MIT */
+ * Copyright (c) 2012 "Cowboy" Ben Alman; Licensed MIT */
 
 cowboy.register("Auto-retry join server");
 

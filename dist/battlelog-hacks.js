@@ -1,10 +1,10 @@
 /* Battlelog Hacks
  * http://benalman.com/
- * Copyright (c) 2011 "Cowboy" Ben Alman; Licensed MIT */
+ * Copyright (c) 2012 "Cowboy" Ben Alman; Licensed MIT */
 
 // Global namespace.
 window.cowboy = {
-  version: "0.3.3",
+  version: "0.3.4",
   registry: [],
   register: function(name) {
     cowboy.registry.push(name);
@@ -18,13 +18,11 @@ window.cowboy = {
 // Hooker.
 var exports = cowboy.hooker = {};
 
-/* JavaScript Hooker - v0.2.2 - 11/5/2011
- * http://github.com/cowboy/javascript-hooker
- * Copyright (c) 2011 "Cowboy" Ben Alman; Licensed MIT, GPL */
+/*! JavaScript Hooker - v0.2.3 - 1/22/2012
+* http://github.com/cowboy/javascript-hooker
+* Copyright (c) 2012 "Cowboy" Ben Alman; Licensed MIT */
 
 (function(exports) {
-  // Since undefined can be overwritten, an internal reference is kept.
-  var undef;
   // Get an array from an array-like object with slice.call(arrayLikeObject).
   var slice = [].slice;
   // Get an "[object [[Class]]]" string with toString.call(value).
@@ -394,43 +392,29 @@ cowboy.register("Auto-select first server");
   }
 }());
 
-cowboy.register("Remember Com center friends list state");
+cowboy.register("Initialize Com center friends list state");
 
 (function() {
-  // The comcenter.updateLocalStorage method seems to be called whenever the
-  // online and offline friends lists are opened or closed.
-  cowboy.hooker.hook(comcenter, "updateLocalStorage", {
-    post: function() {
-      // Get the current com center friends list state.
-      var state = $S("comcenter-surface-friends").getState();
-      // Store state for later use.
-      localStorage.setItem("cb_show_friends_online", state.showingOnline);
-      localStorage.setItem("cb_show_friends_offline", state.showingOffline);
-    }
-  });
-
   // Get the current Battlelog com center friends list state object.
   var state = $S("comcenter-surface-friends").getState();
 
   // Fix state, logging if it actually needed to be fixed..
   function fix(mode, s) {
     // Update the Battlelog state object showingOnline/showingOffline prop.
-    state["showing" + mode[0].toUpperCase() + mode.slice(1)] = s;
+    state["showing" + mode] = s;
     // If the currently displayed state doesn't reflect the expected state...
+    mode = mode.toLowerCase();
     if (Boolean($(".comcenter-friend-" + mode + ":visible").length) !== s) {
-      // Log to the console.
-      cowboy.log("Com center " + mode + " friends list should have been " +
-        (s ? "visible" : "hidden") + " but wasn't, fixing.");
       // Actually hide or show the friends list in the DOM.
       $("#comcenter-" + mode + "-separator").toggleClass("showing-" + mode, s);
       $(".comcenter-friend-" + mode).toggleClass("comcenter-friend-hidden", !s);
     }
   }
 
-  // Fix both online and offline state. Online defaults to shown, while offline
-  // defaults to hidden.
-  fix("online", localStorage.getItem("cb_show_friends_online") !== "false");
-  fix("offline", localStorage.getItem("cb_show_friends_offline") === "true");
+  // Instead of attempting to store and restore state, always start with Online
+  // friends opened and Offline friends closed. It's just easier that way.
+  fix("Online", true);
+  fix("Offline", false);
 
   // Force Battlelog to update its internal state objects.
   comcenter.updateLocalStorage();

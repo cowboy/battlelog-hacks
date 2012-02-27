@@ -5,7 +5,7 @@
 
 /* Battlelog Hacks
  * http://benalman.com/
- * Copyright (c) 2011 "Cowboy" Ben Alman; Licensed MIT */
+ * Copyright (c) 2012 "Cowboy" Ben Alman; Licensed MIT */
 
 var elem = document.createElement("script");
 elem.src = "http://localhost:8000/";
