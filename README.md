@@ -8,7 +8,7 @@ EA's new Battlelog service is pretty awesome. Except when it isn't.
 * <del>Remembers and auto-re-applies server browser sorting preference.</del> **Fixed!**
 * Automatically selects the first server in the server browser after refreshing or sorting.
 * Prevents the server browser from scrolling to the top of the page on refresh.
-* Remembers Com center friends list shown/collapsed state.
+* Ensures that Com center Online friends starts opened, while Offline friends starts collapsed.
 
 ## What might this script do in the future?
 
@@ -43,7 +43,7 @@ Once the [userscript][userscript] has been installed, changes to the [main scrip
 
 * This is a work in progress.
 * Lots of messages are logged to the console. Check it out.
-* This has been tested in Firefox 7 (with [Greasemonkey][greasemonkey]) and Chrome 14.
+* This has been tested in Firefox 7 (with [Greasemonkey][greasemonkey]) and Chrome 17.
 * It works for me.
 * Hopefully ESN will fix these issues internally, rendering this script obsolete.
 
